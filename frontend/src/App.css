@@ -1,0 +1,206 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4CAF50;
+  padding: 1rem;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.home, .auth-form {
+  text-align: center;
+  padding: 2rem;
+}
+
+.auth-form form {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form label {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.auth-form input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.7rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.generate-keys {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.generate-keys h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.keys-display textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-family: monospace;
+  resize: none;
+}
+
+form {
+  margin-top: 20px;
+}
+
+form h3 {
+  margin-bottom: 10px;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+form input[type="file"] {
+  margin-bottom: 15px;
+}
+
+form .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form .btn:hover {
+  background: #0056b3;
+}
+
+.generate-keys {
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+}
+
+.key-buttons {
+  margin: 20px 0;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.file-input {
+  margin-top: 20px;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.key-display {
+  margin-top: 20px;
+}
+
+.key-display textarea {
+  width: 100%;
+  font-family: monospace;
+  font-size: 1em;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
+
+/* App.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 1.5em;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-item {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.navbar-item:hover {
+  text-decoration: underline;
+}

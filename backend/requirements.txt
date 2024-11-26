@@ -1,0 +1,4 @@
+Flask==2.3.2
+pycryptodome==3.18.0  # For RSA encryption and decryption
+qrcode==7.3           # For generating QR codes
+Flask-Cors==3.0.10    # For handling CORS between Flask and React
