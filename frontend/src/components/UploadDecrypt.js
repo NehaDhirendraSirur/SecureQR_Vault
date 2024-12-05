@@ -1,87 +1,94 @@
 import React, { useState } from 'react';
 import jsQR from 'jsqr'; // Import jsQR for QR code decoding
+import { useLocation } from 'react-router-dom';
 
 const UploadDecrypt = () => {
-  const [file, setFile] = useState(null);   // Store the uploaded file
-  const [privateKey, setPrivateKey] = useState('');  // Store entered private key
-  const [decryptedData, setDecryptedData] = useState(null); // Store decrypted data
-  const [error, setError] = useState(''); // Store any error messages
-
+  const location=useLocation();
+  const [file, setFile] = useState(null); // Store the uploaded file
+  const [privateKey, setPrivateKey] = useState(''); // Store the entered private key
+  const { uploadedFile, uploadedText, dataType, publicKey } = location.state || {};
+  const [decryptedData, setDecryptedData] = useState(''); // Store decrypted data
+  const [error, setError] = useState(''); // Store error messages
+  const [flag, setFlag] = useState(false);
+  
   // Handle file upload
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    setError('');
+    setDecryptedData('');
   };
 
-  // Handle private key change
+  // Handle private key input
   const handlePrivateKeyChange = (e) => {
     setPrivateKey(e.target.value);
+    setError('');
   };
 
-  // Handle decryption logic
+  // Decrypt the QR code
   const handleDecrypt = () => {
+    setFlag(true);
     if (!file) {
-      alert('Please upload a QR code file first');
+      setError('Please upload a QR code file first.');
       return;
     }
 
     if (!privateKey) {
-      alert('Please enter your private key');
+      setError('Please enter your private key.');
       return;
     }
 
-    // Create an image element to load the uploaded file
-    const img = new Image();
     const reader = new FileReader();
 
-    reader.onload = function(event) {
-      img.src = event.target.result;  // Set the image source to the file data
-    };
+    reader.onload = () => {
+      const img = new Image();
 
-    reader.onerror = function() {
-      setDecryptedData(null);
-      setError('Error reading file');
-    };
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
 
-    reader.readAsDataURL(file);  // Read the file as a data URL
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-    img.onload = function() {
-      // Create a canvas to extract pixel data
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
 
-      // Draw the image onto the canvas
-      ctx.drawImage(img, 0, 0, img.width, img.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
 
-      // Get the image data (pixel data) from the canvas
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(imageData.data, canvas.width, canvas.height);  // Pass pixel data to jsQR
-
-      if (code) {
-        const encryptedData = code.data; // Simulated encrypted data from QR code
-        const actualPrivateKey = privateKey;  // Use the private key generated earlier
-
-        // Simulate the decryption process by checking the private key
-        if (privateKey === actualPrivateKey) {
-          const decrypted = decryptData(encryptedData); // Simulate decryption function
-          setDecryptedData(decrypted);
-          setError('');
+        if (code && code.data) {
+          // Simulate decryption logic
+          const decrypted = decryptData(code.data, privateKey);
+          if (decrypted) {
+            setDecryptedData(decrypted);
+            setError('');
+          } else {
+            setError('Invalid private key. Unable to decrypt data.');
+          }
         } else {
-          setDecryptedData(null);
-          setError('Invalid private key');
+          setError('No valid QR code found in the image.');
         }
-      } else {
-        setDecryptedData(null);
-        setError('No QR code found in the image');
-      }
+      };
+
+      img.onerror = () => {
+        setError('Failed to load the image. Please upload a valid file.');
+      };
+
+      img.src = reader.result;
     };
+
+    reader.onerror = () => {
+      setError('Failed to read the file. Please try again.');
+    };
+
+    reader.readAsDataURL(file);
   };
 
-  // Simulated decryption function (replace with actual decryption logic)
-  const decryptData = (encryptedData) => {
-    // Directly returning the decrypted content
-    return `Decrypted Content: ${encryptedData}`;  // Replace with actual decrypted data logic
+  // Simulated decryption function
+  const decryptData = (encryptedData, key) => {
+    // Example decryption logic (replace this with real decryption logic)
+    if (key === 'correct-private-key') {
+      return `Decrypted Content: ${encryptedData}`;
+    }
+    return null; // Return null if decryption fails
   };
 
   return (
@@ -89,8 +96,8 @@ const UploadDecrypt = () => {
       <h2>Upload and Decrypt QR Code</h2>
 
       {/* File Upload */}
-      <input type="file" onChange={handleFileChange} />
-      
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+
       {/* Input for Private Key */}
       <div className="private-key-input">
         <label htmlFor="privateKey">Enter Private Key:</label>
@@ -106,18 +113,39 @@ const UploadDecrypt = () => {
       {/* Decrypt Button */}
       <button onClick={handleDecrypt}>Decrypt QR Code</button>
 
-      {/* Error message if key is incorrect */}
-      {error && <p className="error-message">{error}</p>}
+      {/* Decrypted Data */}
+      { flag &&(
+        // <div className="decrypted-data">
+        //   <h3>Decrypted Data:</h3>
+        //   <p>{uploadeddata}</p>
+        // </div>
 
-      {/* Display decrypted data if private key is correct */}
-      {decryptedData && (
-        <div className="decrypted-data">
-          <h3>Decrypted Data:</h3>
-          <p>{decryptedData}</p>
-        </div>
+
+
+<div className="decrypted-data">
+<h3>Uploaded Data:</h3>
+{dataType === 'text' ? (
+  <textarea value={uploadedText} readOnly rows="6" cols="50" />
+) : dataType === 'image' ? (
+  <img
+    src={URL.createObjectURL(uploadedFile)}
+    alt="Uploaded"
+    style={{ maxWidth: '300px', maxHeight: '300px' }}
+  />
+) : dataType === 'pdf' ? (
+  <embed
+    src={URL.createObjectURL(uploadedFile)}
+    type="application/pdf"
+    width="300"
+    height="400"
+  />
+) : (
+  <p>No data uploaded.</p>
+)}
+</div>
       )}
     </div>
   );
 };
 
-export default UploadDecrypt;
+export default UploadDecrypt ;

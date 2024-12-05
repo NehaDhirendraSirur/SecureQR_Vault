@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { QRCodeCanvas } from 'qrcode.react';
+import { useNavigate } from 'react-router-dom';
 import forge from 'node-forge';
 
 const EncryptData = () => {
@@ -10,6 +11,7 @@ const EncryptData = () => {
   const [qrReference, setQrReference] = useState('');
   const [timer, setTimer] = useState(60);
   const [isQrVisible, setIsQrVisible] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (qrReference) {
@@ -95,7 +97,16 @@ const EncryptData = () => {
     setIsQrVisible(false); // Hide it temporarily
     setTimer(60); // Reset the timer for the next encryption
   };
-
+  const handleDecrypt = () => {
+    navigate('/uploaddecrypt', {
+      state: {
+        uploadedFile,
+        uploadedText,
+        dataType,
+        publicKey,  // Pass the private key as well
+      },
+    });
+  };
   return (
     <div className="encrypt-data">
       <h2>Encrypt Data</h2>
@@ -162,7 +173,7 @@ const EncryptData = () => {
 
       {/* Share Button (Placeholder) */}
       <div>
-        <button>Share QR Code</button> {/* Logic for sharing to be implemented later */}
+        <button onClick={handleDecrypt}>Decrypt the data</button> {/* Logic for sharing to be implemented later */}
       </div>
     </div>
   );
