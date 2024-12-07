@@ -1,5 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+// import "../public/weblogo.png"; // Import the CSS file
+// import "../public/"; // Import the CSS file
+import logo from "../assets/weblogo.png"; // Update the path to your logo image
 
 const Navbar = () => {
   return (
@@ -7,6 +10,7 @@ const Navbar = () => {
       <div className="navbar-brand">
         {/* Logo and Home link */}
         <Link to="/" className="navbar-item">
+          <img src={logo} alt="SecureQR Logo" />
           SecureQR Vault
         </Link>
       </div>
